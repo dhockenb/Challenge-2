@@ -1,0 +1,50 @@
+  609  python3 app.py
+  610  python3 app.py
+  611  git clone https://github.com/dhockenb/Challenge-2.git
+  612  pwd
+  613  /Users/Hockenbery/Desktop/Screen\ Shot\ 2021-12-12\ at\ 10.20.00\ PM.png 
+  614  history 50 > terminal_history.txt
+  615  pwd
+  616  git status
+  617  git add README. md
+  618  git add README.md
+  619  pwd
+  620  ls
+  621  cd Challenge-2
+  622  ls
+  623  git add README.md
+  624  git status
+  625  git add app.py
+  626  cd data
+  627  ls
+  628  git add daily_rate_sheet.csv
+  629  cd ..
+  630  ls
+  631  cd qualifier
+  632  cd filters
+  633  ls
+  634  git add credit_score.py
+  635  git add debt_to_income.py
+  636  git add loan_to_value.py
+  637  git add max_loan.py
+  638  pwd
+  639  cd ..
+  640  ls
+  641  cd utils
+  642  ls
+  643  git add calculators.py
+  644  git add fileio
+  645  git status
+  646  git commit -m README.md
+  647  git push
+  648  git status
+  649  cd ..
+  650  pwd
+  651  cd ..
+  652  pwd
+  653  ls
+  654  git add app.py
+  655  git status
+  656  ls
+  657  ls
+  658  history 50 > terminal_history.txt
