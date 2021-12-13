@@ -1,33 +1,34 @@
+# import build-in modules/functions
+
 import questionary
 from pathlib import Path
 import fire
+import csv
 
-
+# import input/out functions from fileio
 from utils.fileio import load_csv, save_csv
 
+# import debt to income and loan to value calculators from calculators
 from utils.calculators import (
     calculate_monthly_debt_ratio,
     calculate_loan_to_value_ratio
 )
 
+# import filters for loan app
 from filters.max_loan import filter_max_loan_size
 from filters.credit_score import filter_credit_score
 from filters.debt_to_income import filter_debt_to_income
 from filters.loan_to_value import filter_loan_to_value
 
-
+# function for input of banking data from csv file entered on command line
 def load_bank_data():
-    """Ask for the file path to the latest banking data and load the CSV file.
-
-    Returns:
-        The bank data from the data rate sheet CSV file.
-    """
 
     csvpath = questionary.text("Enter a file path to a rate-sheet (.csv):").ask()
     csvpath = Path(csvpath)
 
     return load_csv(csvpath)
 
+# function for input of applicant data from command line
 def get_applicant_info():
     credit_score = questionary.text('What is your credit score?').ask()
     debt = questionary.text('What is your monthly debt?').ask()
@@ -43,28 +44,8 @@ def get_applicant_info():
 
     return (credit_score, debt, income, loan_amount, home_value)
 
-
-def find_qualifying_loans(bank_data, credit_score, debt, income, loan_amount, home_value):
-    """Determine which loans the user qualifies for.
-
-    Loan qualification criteria is based on:
-        - Credit Score
-        - Loan Size
-        - Debit to Income ratio (calculated)
-        - Loan to Value ratio (calculated)
-
-    Args:
-        bank_data (list): A list of bank data.
-        credit_score (int): The applicant's current credit score.
-        debt (float): The applicant's total monthly debt payments.
-        income (float): The applicant's total monthly income.
-        loan (float): The total loan amount applied for.
-        home_value (float): The estimated home value.
-
-    Returns:
-        A list of the banks willing to underwrite the loan.
-
-    """
+# function for filtering bank list for qualifying loans
+def find_qualifying_loans(bank_data, credit_score, debt, income, loan_amount, home_value):   
 
     # Calculate the monthly debt ratio
     monthly_debt_ratio = calculate_monthly_debt_ratio(debt, income)
@@ -84,12 +65,19 @@ def find_qualifying_loans(bank_data, credit_score, debt, income, loan_amount, ho
 
     return bank_data_filtered
 
-      # Find qualifying loans
-   
+    
+ # function to save list of qualifying loans using command line input  
+def save_qualifying_loans():
+        first = questionary.confirm("Do you want to save a list of the qualifying loans?", default=True).ask()
+        csvpath = questionary.path("Enter a file path to save as a csv file").ask()
+        print(first)
+        print(csvpath)
+        csvpath = Path(csvpath)
+        return csvpath
 
+# the main function for running the script       
 def run():
-    """The main function for running the script."""
-
+    
     # Load the latest Bank data
     bank_data = load_bank_data()
 
@@ -99,12 +87,11 @@ def run():
     qualifying_loans = find_qualifying_loans(
         bank_data, credit_score, debt, income, loan_amount, home_value
     )
+    # Ask for csvpath if applicant wants to save list of qualifying loans
+    cvpath = save_qualifying_loans()
 
-
-
-# Command Line Instruction
-# python app.py --credit_score=750 --debt=5000 --income=20000
-# python app.py --credit_score=805 --debt=3000 --income=8000
-
+    # Write csv file of qualifying loans
+    writeornot = save_csv(qualifying_loans, cvpath)
+    
 if __name__ == "__main__":
     fire.Fire(run)
